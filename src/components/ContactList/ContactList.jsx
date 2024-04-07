@@ -1,26 +1,25 @@
 import { useSelector } from "react-redux";
 import Contact from "../Contact/Contact";
-import { selectNameFilter } from "../../redux/filtersSlice";
-import { selectContacts } from "../../redux/contactsSlice";
+import {
+  selectNameFilter,
+  selectFilteredContacts,
+} from "../../redux/selectors";
 
 const ContactList = () => {
-  const contactsData = useSelector(selectContacts);
+  // const contactsData = useSelector(selectContacts);
   const search = useSelector(selectNameFilter);
-  
-  let filterContacts = [];
-  //  const filterContacts = contactsData.filter((contact) =>
-  if (contactsData !== undefined) { // Перевірка на undefined
-    filterContacts = contactsData.filter((contact) =>
-      contact.name.toLowerCase().includes(search.trim().toLowerCase())
-    );
- 
-    return (
-      <ul>
-        {filterContacts.map((contact) => (
-          <Contact key={contact.id} contact={contact} />
-        ))}
-      </ul>
-    );
-  }
-}
+  const filteredContacts = useSelector(selectFilteredContacts);
+
+  return (
+    <ul>
+      {filteredContacts.map((contact) => {
+        if (contact.name.toLowerCase().includes(search.toLowerCase().trim())) {
+          return <Contact key={contact.id} contact={contact} />;
+        }
+        return null;
+      })}
+    </ul>
+  );
+};
+
 export default ContactList;
